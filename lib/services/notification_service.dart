@@ -15,7 +15,12 @@ class NotificationService {
   }
 
   // Show snackbar
-  static void showSnackBar(BuildContext context, String message, {bool isError = false}) {
+  static void showSnackBar(
+    BuildContext context,
+    String message, {
+    bool isError = false,
+  }) {
+    ScaffoldMessenger.of(context).clearSnackBars();
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message),

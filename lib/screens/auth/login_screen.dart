@@ -8,6 +8,7 @@ import 'package:doctor_appointment_manager/services/notification_service.dart';
 import 'package:doctor_appointment_manager/widgets/common/custom_button.dart';
 import 'package:doctor_appointment_manager/widgets/common/custom_text_field.dart';
 import 'package:doctor_appointment_manager/widgets/common/loading_indicator.dart';
+import 'package:doctor_appointment_manager/config/animations.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -37,15 +38,14 @@ class _LoginScreenState extends State<LoginScreen> {
       );
 
       if (success && mounted) {
-        // Navigate based on user role
+        // Navigate based on user role with animations
         if (authProvider.user?.role == 'doctor') {
-          Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (_) => const DoctorHomeScreen()),
-          );
-          print('Doctor logged in: ${authProvider.user?.role}');
+          Navigator.of(
+            context,
+          ).pushReplacement(AppAnimations.slideRight(const DoctorHomeScreen()));
         } else if (authProvider.user?.role == 'patient') {
           Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (_) => const PatientHomeScreen()),
+            AppAnimations.slideRight(const PatientHomeScreen()),
           );
         }
       } else if (mounted) {
@@ -68,80 +68,134 @@ class _LoginScreenState extends State<LoginScreen> {
             authProvider.isLoading
                 ? const LoadingIndicator()
                 : SingleChildScrollView(
-                  padding: const EdgeInsets.all(24.0),
+                  // padding: const EdgeInsets.all(24.0),
                   child: Form(
                     key: _formKey,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        const SizedBox(height: 60),
-                        const Text(
-                          'Doctor Appointment Manager',
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                        const SizedBox(height: 40),
-                        const Text(
-                          'Login',
-                          style: TextStyle(
-                            fontSize: 28,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                        const SizedBox(height: 30),
-                        CustomTextField(
-                          label: 'Email',
-                          controller: _emailController,
-                          keyboardType: TextInputType.emailAddress,
-                          prefixIcon: const Icon(Icons.email),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please enter your email';
-                            }
-                            if (!RegExp(
-                              r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
-                            ).hasMatch(value)) {
-                              return 'Please enter a valid email';
-                            }
-                            return null;
-                          },
-                        ),
-                        const SizedBox(height: 16),
-                        CustomTextField(
-                          label: 'Password',
-                          controller: _passwordController,
-                          obscureText: true,
-                          prefixIcon: const Icon(Icons.lock),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please enter your password';
-                            }
-                            if (value.length < 6) {
-                              return 'Password must be at least 6 characters';
-                            }
-                            return null;
-                          },
-                        ),
-                        const SizedBox(height: 24),
-                        CustomButton(
-                          text: 'Login',
-                          onPressed: _login,
-                          isLoading: authProvider.isLoading,
-                        ),
-                        const SizedBox(height: 16),
-                        TextButton(
-                          onPressed: () {
-                            Navigator.of(context).push(
-                              MaterialPageRoute(
-                                builder: (_) => const RegisterScreen(),
+                        // AppAnimations.pulse(
+                        //   Image.network(
+                        //     'https://tse2.mm.bing.net/th/id/OIP.cSgjmqsQ5KmBQQF9qO-8zQHaFq?rs=1&pid=ImgDetMain&o=7&rm=3', // تأكد من إضافة شعار للتطبيق
+                        //     height: 120,
+                        //   ),
+                        // ),
+                        // const SizedBox(height: 20),
+                        // Text(
+                        //   'Doctor Appointment Manager',
+                        //   style: Theme.of(context).textTheme.headlineMedium,
+                        //   textAlign: TextAlign.center,
+                        // ),
+
+                        /*
+                        stack
+                        children 
+                        container with image
+                        positioned text
+
+
+                        */
+                        Container(
+                          width: double.infinity,
+                          height: 200,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: NetworkImage(
+                                'https://tse2.mm.bing.net/th/id/OIP.cSgjmqsQ5KmBQQF9qO-8zQHaFq?rs=1&pid=ImgDetMain&o=7&rm=3', // تأكد من إضافة شعار للتطبيق
                               ),
-                            );
-                          },
-                          child: const Text('Don\'t have an account? Register'),
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+
+                          // child:  Image.network(
+                          //   'https://tse2.mm.bing.net/th/id/OIP.cSgjmqsQ5KmBQQF9qO-8zQHaFq?rs=1&pid=ImgDetMain&o=7&rm=3', // تأكد من إضافة شعار للتطبيق
+                          //   height: 120,
+
+                          // ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(18.0),
+                          child: Column(
+                            children: [
+                              const SizedBox(height: 20),
+                              Text(
+                                'Doctor Appointment Manager',
+                                style:
+                                    Theme.of(context).textTheme.headlineMedium,
+                                textAlign: TextAlign.center,
+                              ),
+                              const SizedBox(height: 40),
+                              //shader mask 
+                              Text(
+                                'Login',
+                                style:
+                                    Theme.of(context).textTheme.headlineLarge,
+                                textAlign: TextAlign.center,
+                              ),
+                              CustomTextField(
+                                label: 'email',
+                                controller: _emailController,
+                                obscureText: false,
+                                prefixIcon: const Icon(Icons.email),
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Please enter your email';
+                                  }
+                                  if (!RegExp(
+                                    r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
+                                  ).hasMatch(value)) {
+                                    return 'Please enter a valid email';
+                                  }
+                                  return null;
+                                },
+                              ),
+                              const SizedBox(height: 16),
+                              CustomTextField(
+                                label: 'Password',
+                                controller: _passwordController,
+                                obscureText: true,
+                                prefixIcon: const Icon(Icons.lock),
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Please enter your password';
+                                  }
+                                  if (value.length < 6) {
+                                    return 'Password must be at least 6 characters';
+                                  }
+                                  return null;
+                                },
+                              ),
+                              const SizedBox(height: 24),
+                              CustomButton(
+                                text: 'Login',
+                                onPressed: _login,
+                                isLoading: authProvider.isLoading,
+                              ),
+                              const SizedBox(height: 16),
+                              Row(
+                                children: [
+                                  Text('Don\'t have an account?'),
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.of(context).push(
+                                        MaterialPageRoute(
+                                          builder:
+                                              (_) => const RegisterScreen(),
+                                        ),
+                                      );
+                                    },
+                                    child: const Text(
+                                      'Register',
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        // color:
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),

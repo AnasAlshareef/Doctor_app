@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:doctor_appointment_manager/models/user_model.dart';
 import 'package:doctor_appointment_manager/services/auth_service.dart';
+import 'dart:io';
 
 class AuthProvider with ChangeNotifier {
   final AuthService _authService = AuthService();
@@ -52,6 +53,7 @@ class AuthProvider with ChangeNotifier {
     String name,
     String role, {
     String? specialization,
+    File? profileImage,
   }) async {
     _isLoading = true;
     _error = null;
@@ -60,6 +62,15 @@ class AuthProvider with ChangeNotifier {
     try {
       UserCredential userCredential = await _authService
           .registerWithEmailAndPassword(email, password);
+      
+      // Upload profile image if provided
+      // String? photoUrl;
+      // if (profileImage != null) {
+      //   photoUrl = await _authService.uploadProfileImage(
+      //     profileImage, 
+      //     userCredential.user!.uid
+      //   );
+      // }
 
       UserModel newUser = UserModel(
         uid: userCredential.user!.uid,
@@ -67,6 +78,7 @@ class AuthProvider with ChangeNotifier {
         name: name,
         role: role,
         specialization: specialization,
+        // photoUrl: photoUrl,
       );
 
       await _authService.createUserInFirestore(newUser);

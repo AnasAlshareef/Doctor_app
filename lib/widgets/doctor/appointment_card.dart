@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:doctor_appointment_manager/models/appointment_model.dart';
+import 'package:doctor_appointment_manager/config/theme.dart';
+import 'package:doctor_appointment_manager/config/animations.dart';
 
 class AppointmentCard extends StatelessWidget {
   final AppointmentModel appointment;
@@ -16,71 +18,87 @@ class AppointmentCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.only(bottom: 16),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(12),
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Patient: ${appointment.patientName}',
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                    ),
-                  ),
-                  _buildStatusChip(context),
-                ],
-              ),
-              const SizedBox(height: 8),
-              Row(
-                children: [
-                  const Icon(Icons.calendar_today, size: 16),
-                  const SizedBox(width: 8),
-                  Text(
-                    DateFormat('EEEE, MMM d, yyyy').format(appointment.appointmentTime),
-                    style: const TextStyle(fontSize: 14),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 4),
-              Row(
-                children: [
-                  const Icon(Icons.access_time, size: 16),
-                  const SizedBox(width: 8),
-                  Text(
-                    DateFormat('h:mm a').format(appointment.appointmentTime),
-                    style: const TextStyle(fontSize: 14),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 16),
-              if (appointment.status == 'scheduled')
+    return AppAnimations.pulse(
+      Card(
+        margin: const EdgeInsets.only(bottom: 16),
+        elevation: 3,
+        shadowColor: AppTheme.shadowColor,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        child: InkWell(
+          onTap: onTap,
+          borderRadius: BorderRadius.circular(16),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    TextButton(
-                      onPressed: () => onStatusChange('completed'),
-                      child: const Text('Mark Completed'),
+                    Text(
+                      'Patient: ${appointment.patientName}',
+                      style: Theme.of(context).textTheme.titleMedium,
                     ),
-                    const SizedBox(width: 8),
-                    TextButton(
-                      onPressed: () => onStatusChange('cancelled'),
-                      style: TextButton.styleFrom(
-                        foregroundColor: Colors.red,
-                      ),
-                      child: const Text('Cancel'),
-                    ),
+                    _buildStatusChip(context),
                   ],
                 ),
-            ],
+                const SizedBox(height: 12),
+                Container(
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    color: AppTheme.primaryColor.withOpacity(0.05),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Row(
+                    children: [
+                      Icon(Icons.calendar_today, size: 18, color: AppTheme.primaryColor),
+                      const SizedBox(width: 12),
+                      Text(
+                        DateFormat('EEEE, MMM d, yyyy').format(appointment.appointmentTime),
+                        style: TextStyle(fontSize: 14, color: AppTheme.textColor),
+                      ),
+                      const Spacer(),
+                      Icon(Icons.access_time, size: 18, color: AppTheme.primaryColor),
+                      const SizedBox(width: 8),
+                      Text(
+                        DateFormat('h:mm a').format(appointment.appointmentTime),
+                        style: TextStyle(fontSize: 14, color: AppTheme.textColor),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 16),
+                if (appointment.status == 'scheduled')
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      ElevatedButton.icon(
+                        onPressed: () => onStatusChange('completed'),
+                        icon: const Icon(Icons.check, size: 18),
+                        label: const Text('Complete'),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppTheme.successColor,
+                          foregroundColor: Colors.white,
+                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                          textStyle: const TextStyle(fontSize: 14),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      ElevatedButton.icon(
+                        onPressed: () => onStatusChange('cancelled'),
+                        icon: const Icon(Icons.cancel, size: 18),
+                        label: const Text('Cancel'),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: AppTheme.errorColor,
+                          foregroundColor: Colors.white,
+                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                          textStyle: const TextStyle(fontSize: 14),
+                        ),
+                      ),
+                    ],
+                  ),
+              ],
+            ),
           ),
         ),
       ),

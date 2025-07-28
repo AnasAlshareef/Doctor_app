@@ -18,7 +18,8 @@ class PatientHomeScreen extends StatefulWidget {
   State<PatientHomeScreen> createState() => _PatientHomeScreenState();
 }
 
-class _PatientHomeScreenState extends State<PatientHomeScreen> with SingleTickerProviderStateMixin {
+class _PatientHomeScreenState extends State<PatientHomeScreen>
+    with SingleTickerProviderStateMixin {
   late TabController _tabController;
   final List<String> _tabs = ['Doctors', 'My Appointments'];
 
@@ -38,10 +39,13 @@ class _PatientHomeScreenState extends State<PatientHomeScreen> with SingleTicker
   Future<void> _loadData() async {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     final doctorProvider = Provider.of<DoctorProvider>(context, listen: false);
-    final appointmentProvider = Provider.of<AppointmentProvider>(context, listen: false);
-    
+    final appointmentProvider = Provider.of<AppointmentProvider>(
+      context,
+      listen: false,
+    );
+
     await doctorProvider.getAllDoctors();
-    
+
     if (authProvider.user != null) {
       await appointmentProvider.getPatientAppointments(authProvider.user!.uid);
     }
@@ -50,7 +54,7 @@ class _PatientHomeScreenState extends State<PatientHomeScreen> with SingleTicker
   Future<void> _signOut() async {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     await authProvider.signOut();
-    
+
     if (mounted) {
       Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(builder: (_) => const LoginScreen()),
@@ -69,27 +73,25 @@ class _PatientHomeScreenState extends State<PatientHomeScreen> with SingleTicker
 
     return Scaffold(
       appBar: AppBar(
+        // backgroundColor: Colors.white,
         title: const Text('Patient Dashboard'),
         actions: [
-          IconButton(
-            icon: const Icon(Icons.logout),
-            onPressed: _signOut,
-          ),
+          IconButton(icon: const Icon(Icons.logout), onPressed: _signOut),
         ],
         bottom: TabBar(
+          labelColor: Colors.white,
+          
           controller: _tabController,
           tabs: _tabs.map((tab) => Tab(text: tab)).toList(),
         ),
       ),
-      body: authProvider.user == null
-          ? const Center(child: Text('Please login to continue'))
-          : TabBarView(
-              controller: _tabController,
-              children: [
-                _buildDoctorsList(),
-                _buildAppointmentsList(),
-              ],
-            ),
+      body:
+          authProvider.user == null
+              ? const Center(child: Text('Please login to continue'))
+              : TabBarView(
+                controller: _tabController,
+                children: [_buildDoctorsList(), _buildAppointmentsList()],
+              ),
     );
   }
 
@@ -165,7 +167,9 @@ class _PatientHomeScreenState extends State<PatientHomeScreen> with SingleTicker
     return RefreshIndicator(
       onRefresh: () {
         final authProvider = Provider.of<AuthProvider>(context, listen: false);
-        return appointmentProvider.getPatientAppointments(authProvider.user!.uid);
+        return appointmentProvider.getPatientAppointments(
+          authProvider.user!.uid,
+        );
       },
       child: ListView.builder(
         padding: const EdgeInsets.all(16),
@@ -205,7 +209,10 @@ class _PatientHomeScreenState extends State<PatientHomeScreen> with SingleTicker
                   ),
                   const SizedBox(height: 8),
                   Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 4,
+                    ),
                     decoration: BoxDecoration(
                       color: _getStatusColor(appointment.status),
                       borderRadius: BorderRadius.circular(12),
@@ -220,16 +227,19 @@ class _PatientHomeScreenState extends State<PatientHomeScreen> with SingleTicker
               onTap: () {
                 Navigator.of(context).push(
                   MaterialPageRoute(
-                    builder: (_) => AppointmentDetailsScreen(appointment: appointment),
+                    builder:
+                        (_) =>
+                            AppointmentDetailsScreen(appointment: appointment),
                   ),
                 );
               },
-              trailing: appointment.status == 'scheduled'
-                  ? IconButton(
-                      icon: const Icon(Icons.cancel, color: Colors.red),
-                      onPressed: () => _cancelAppointment(appointment.id!),
-                    )
-                  : null,
+              trailing:
+                  appointment.status == 'scheduled'
+                      ? IconButton(
+                        icon: const Icon(Icons.cancel, color: Colors.red),
+                        onPressed: () => _cancelAppointment(appointment.id!),
+                      )
+                      : null,
             ),
           );
         },
@@ -238,8 +248,11 @@ class _PatientHomeScreenState extends State<PatientHomeScreen> with SingleTicker
   }
 
   Future<void> _cancelAppointment(String appointmentId) async {
-    final appointmentProvider = Provider.of<AppointmentProvider>(context, listen: false);
-    
+    final appointmentProvider = Provider.of<AppointmentProvider>(
+      context,
+      listen: false,
+    );
+
     bool success = await appointmentProvider.updateAppointmentStatus(
       appointmentId,
       'cancelled',

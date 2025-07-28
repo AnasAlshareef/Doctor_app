@@ -1,10 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:doctor_appointment_manager/models/user_model.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'dart:io';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseStorage _storage = FirebaseStorage.instance;
 
   // Get current user
   User? get currentUser => _auth.currentUser;
@@ -39,6 +42,7 @@ class AuthService {
     }
   }
 
+  
   // Create user in Firestore
   Future<void> createUserInFirestore(UserModel user) async {
     try {

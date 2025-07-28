@@ -7,6 +7,8 @@ import 'package:doctor_appointment_manager/providers/appointment_provider.dart';
 import 'package:doctor_appointment_manager/providers/auth_provider.dart';
 import 'package:doctor_appointment_manager/services/notification_service.dart';
 import 'package:doctor_appointment_manager/widgets/common/custom_button.dart';
+import 'package:doctor_appointment_manager/config/theme.dart';
+import 'package:doctor_appointment_manager/config/animations.dart';
 
 class BookAppointmentScreen extends StatefulWidget {
   final UserModel doctor;
@@ -122,31 +124,65 @@ class _BookAppointmentScreenState extends State<BookAppointmentScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Book Appointment'),
+        elevation: 0,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Card(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Dr. ${widget.doctor.name}',
-                      style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
+            AppAnimations.pulse(
+              Card(
+                elevation: 4,
+                shadowColor: AppTheme.shadowColor,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Row(
+                    children: [
+                      Hero(
+                        tag: 'doctor-${widget.doctor.uid}',
+                        child: CircleAvatar(
+                          radius: 40,
+                          backgroundColor: Colors.grey[200],
+                          backgroundImage: widget.doctor.photoUrl != null
+                              ? NetworkImage(widget.doctor.photoUrl!)
+                              : null,
+                          child: widget.doctor.photoUrl == null
+                              ? Icon(Icons.person, color: Colors.grey[400], size: 40)
+                              : null,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      widget.doctor.specialization ?? 'General Practitioner',
-                      style: const TextStyle(fontSize: 16),
-                    ),
-                  ],
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Dr. ${widget.doctor.name}',
+                              style: Theme.of(context).textTheme.titleLarge,
+                            ),
+                            const SizedBox(height: 8),
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                              decoration: BoxDecoration(
+                                color: AppTheme.primaryColor.withOpacity(0.1),
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: Text(
+                                widget.doctor.specialization ?? 'General Practitioner',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: AppTheme.primaryColor,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

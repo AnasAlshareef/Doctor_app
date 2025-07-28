@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:doctor_appointment_manager/models/user_model.dart';
+import 'package:doctor_appointment_manager/config/theme.dart';
 
 class DoctorCard extends StatelessWidget {
   final UserModel doctor;
@@ -17,21 +18,22 @@ class DoctorCard extends StatelessWidget {
       margin: const EdgeInsets.only(bottom: 16),
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(16),
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Row(
             children: [
-              CircleAvatar(
-                radius: 30,
-                backgroundColor: Theme.of(context).primaryColor,
-                child: Text(
-                  doctor.name.substring(0, 1).toUpperCase(),
-                  style: const TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                  ),
+              Hero(
+                tag: 'doctor-${doctor.uid}',
+                child: CircleAvatar(
+                  radius: 40,
+                  backgroundColor: Colors.grey[200],
+                  backgroundImage: doctor.photoUrl != null
+                      ? NetworkImage(doctor.photoUrl!)
+                      : null,
+                  child: doctor.photoUrl == null
+                      ? Icon(Icons.person, color: Colors.grey[400], size: 40)
+                      : null,
                 ),
               ),
               const SizedBox(width: 16),
@@ -41,34 +43,53 @@ class DoctorCard extends StatelessWidget {
                   children: [
                     Text(
                       'Dr. ${doctor.name}',
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
+                      style: Theme.of(context).textTheme.titleLarge,
+                    ),
+                    const SizedBox(height: 6),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: AppTheme.primaryColor.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Text(
+                        doctor.specialization ?? 'General Practitioner',
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: AppTheme.primaryColor,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                     ),
-                    const SizedBox(height: 4),
-                    Text(
-                      doctor.specialization ?? 'General Practitioner',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.grey[600],
-                      ),
-                    ),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 10),
                     Row(
                       children: [
-                        const Icon(Icons.email, size: 16),
-                        const SizedBox(width: 4),
+                        Icon(Icons.email, size: 16, color: AppTheme.secondaryTextColor),
+                        const SizedBox(width: 6),
                         Text(
                           doctor.email,
-                          style: const TextStyle(fontSize: 12),
+                          style: TextStyle(
+                            fontSize: 12,
+                            color: AppTheme.secondaryTextColor,
+                          ),
                         ),
                       ],
                     ),
                   ],
                 ),
               ),
-              const Icon(Icons.arrow_forward_ios, size: 16),
+              Container(
+                decoration: BoxDecoration(
+                  color: AppTheme.primaryColor.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                padding: const EdgeInsets.all(8),
+                child: Icon(
+                  Icons.arrow_forward_ios,
+                  size: 16,
+                  color: AppTheme.primaryColor,
+                ),
+              ),
             ],
           ),
         ),

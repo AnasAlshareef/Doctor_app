@@ -24,7 +24,7 @@ class _DoctorHomeScreenState extends State<DoctorHomeScreen> with SingleTickerPr
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: _tabs.length, vsync: this);
+    _tabController = TabController(length: _tabs.length, vsync: this);//********************* */
     _loadAppointments();
   }
 
@@ -44,8 +44,8 @@ class _DoctorHomeScreenState extends State<DoctorHomeScreen> with SingleTickerPr
   }
 
   Future<void> _signOut() async {
-    final authProvider = Provider.of<AuthProvider>(context, listen: false);
-    await authProvider.signOut();
+    final  authProvider = Provider.of<AuthProvider>(context, listen: false);
+     await authProvider.signOut();
     
     if (mounted) {
       Navigator.of(context).pushAndRemoveUntil(

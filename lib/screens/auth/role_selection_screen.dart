@@ -7,6 +7,8 @@ import 'package:doctor_appointment_manager/services/notification_service.dart';
 import 'package:doctor_appointment_manager/widgets/common/custom_button.dart';
 import 'package:doctor_appointment_manager/widgets/common/custom_text_field.dart';
 import 'package:doctor_appointment_manager/widgets/common/loading_indicator.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 
 class RoleSelectionScreen extends StatefulWidget {
   final String name;
@@ -27,12 +29,29 @@ class RoleSelectionScreen extends StatefulWidget {
 class _RoleSelectionScreenState extends State<RoleSelectionScreen> {
   String _selectedRole = 'patient';
   final TextEditingController _specializationController = TextEditingController();
+  // File? _profileImage;
+  // final ImagePicker _picker = ImagePicker();
 
   @override
   void dispose() {
     _specializationController.dispose();
     super.dispose();
   }
+
+  // Future<void> _pickImage() async {
+  //   // final XFile? pickedFile = await _picker.pickImage(
+  //   //   source: ImageSource.gallery,
+  //   //   maxWidth: 800,
+  //   //   maxHeight: 800,
+  //   //   imageQuality: 85,
+  //   // );
+
+  //   if (pickedFile != null) {
+  //     setState(() {
+  //       _profileImage = File(pickedFile.path);
+  //     });
+  //   }
+  // }
 
   Future<void> _completeRegistration() async {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
@@ -43,6 +62,7 @@ class _RoleSelectionScreenState extends State<RoleSelectionScreen> {
       widget.name,
       _selectedRole,
       specialization: _selectedRole == 'doctor' ? _specializationController.text.trim() : null,
+      // profileImage: _selectedRole == 'doctor' ? _profileImage : null,
     );
 
     if (success && mounted) {
@@ -58,7 +78,7 @@ class _RoleSelectionScreenState extends State<RoleSelectionScreen> {
         Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (_) => const PatientHomeScreen()),
           (route) => false,
-        );
+        );//********************* */
       }
     } else if (mounted) {
       NotificationService.showSnackBar(
@@ -111,6 +131,32 @@ class _RoleSelectionScreenState extends State<RoleSelectionScreen> {
                     ),
                     const SizedBox(height: 24),
                     if (_selectedRole == 'doctor') ...[  
+                      // Profile Image Picker
+                      Center(
+                        child: Column(
+                          children: [
+                            // GestureDetector(
+                            //   onTap: _pickImage,
+                            //   child: CircleAvatar(
+                            //     radius: 50,
+                            //     backgroundColor: Colors.grey[300],
+                            //     backgroundImage: _profileImage != null 
+                            //         ? FileImage(_profileImage!) 
+                            //         : null,
+                            //     child: _profileImage == null
+                            //         ? const Icon(Icons.add_a_photo, size: 40, color: Colors.grey)
+                            //         : null,
+                            //   ),
+                            // ),
+                            // const SizedBox(height: 8),
+                            // const Text(
+                            //   'Add Profile Photo',
+                            //   style: TextStyle(color: Colors.grey),
+                            // ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 24),
                       CustomTextField(
                         label: 'Specialization',
                         controller: _specializationController,

@@ -15,7 +15,7 @@ class LoadingIndicator extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: SpinKitDoubleBounce(
+      child: SpinKitPulse(
         color: color ?? AppTheme.primaryColor,
         size: size,
       ),
