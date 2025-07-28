@@ -19,6 +19,7 @@ class AppTheme {
     colorScheme: ColorScheme.fromSeed(
       seedColor: primaryColor,
       secondary: accentColor,
+      // ignore: deprecated_member_use
       background: backgroundColor,
       error: errorColor,
       brightness: Brightness.light,
@@ -80,16 +81,6 @@ class AppTheme {
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       color: cardColor,
       margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 0),
-    ),
-    tabBarTheme: TabBarTheme(
-      labelColor: primaryColor,
-      unselectedLabelColor: secondaryTextColor,
-      indicator: BoxDecoration(
-        border: Border(
-          bottom: BorderSide(color: primaryColor, width: 3),
-        ),
-      ),
-      labelStyle: const TextStyle(fontWeight: FontWeight.bold),
     ),
     chipTheme: ChipThemeData(
       backgroundColor: dividerColor,
