@@ -72,27 +72,31 @@ class AppointmentCard extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      ElevatedButton.icon(
-                        onPressed: () => onStatusChange('completed'),
-                        icon: const Icon(Icons.check, size: 18),
-                        label: const Text('Complete'),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppTheme.successColor,
-                          foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                          textStyle: const TextStyle(fontSize: 14),
+                      Flexible(
+                        child: ElevatedButton.icon(
+                          onPressed: () => onStatusChange('completed'),
+                          icon: const Icon(Icons.check, size: 18),
+                          label: const Text('Complete'),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppTheme.successColor,
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                            textStyle: const TextStyle(fontSize: 14),
+                          ),
                         ),
                       ),
                       const SizedBox(width: 8),
-                      ElevatedButton.icon(
-                        onPressed: () => onStatusChange('cancelled'),
-                        icon: const Icon(Icons.cancel, size: 18),
-                        label: const Text('Cancel'),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: AppTheme.errorColor,
-                          foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                          textStyle: const TextStyle(fontSize: 14),
+                      Flexible(
+                        child: ElevatedButton.icon(
+                          onPressed: () => onStatusChange('cancelled'),
+                          icon: const Icon(Icons.cancel, size: 18),
+                          label: const Text('Cancel'),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppTheme.errorColor,
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                            textStyle: const TextStyle(fontSize: 14),
+                          ),
                         ),
                       ),
                     ],
